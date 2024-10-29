@@ -140,9 +140,13 @@ defineOptions({name: 'login-view'});
 }
 
 .login-view__illustration__image {
+  display: block;
   height: 100%;
   object-fit: contain;
   object-position: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 47.5rem;
   width: 100%;
 }
 
