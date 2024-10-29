@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onActivated, onDeactivated, onUnmounted, ref } from 'vue';
+import { computed, onActivated, onDeactivated, onUnmounted, ref, watch } from 'vue';
 import IconComponent from '@/components/icon.vue';
 import { createUid } from '@/utilities/uid';
 
@@ -51,7 +51,7 @@ loop();
 <template>
   <div
     class="text-field-component"
-    :style="{'--x-text-field-component--field-actions-offset': `${fieldActionsOffset}px`}"
+    :style="{'--text-field-component--field-actions-offset': `${fieldActionsOffset}px`}"
   >
     <input
       class="text-field-component__field"
@@ -116,7 +116,7 @@ loop();
   grid-area: field;
   outline: 0px solid rgba(var(--color-primary), 0);
   outline-offset: 0.35rem;
-  padding: 0.5rem calc(0.5rem + var(--x-text-field-component--field-actions-offset)) 0.5rem 0.5rem;
+  padding: 0.5rem calc(0.75rem + var(--text-field-component--field-actions-offset)) 0.5rem 0.75rem;
   transition-property: border, box-shadow, outline, outline-offset;
 }
 
@@ -133,7 +133,7 @@ loop();
   display: flex;
   gap: 0.35rem;
   grid-area: field-actions;
-  margin-right: 0.5rem;
+  margin-right: 0.75rem;
   padding-left: 0.35rem;
   place-self: center end;
   pointer-events: none;
@@ -151,9 +151,12 @@ loop();
   background-color: rgba(var(--color-border), 0);
   border: none;
   border-radius: 100vmax;
+  box-shadow: 0px 0px 0px 0px rgba(var(--color-primary), 0);
   cursor: pointer;
+  outline: 0px solid rgba(var(--color-primary), 0);
+  outline-offset: 0.35rem;
   padding: 0.25rem;
-  transition-property: background-color, color;
+  transition-property: background-color, color, outline, outline-offset;
 }
 
 .text-field-component__field-actions__password--active {
@@ -167,6 +170,13 @@ loop();
 
 .text-field-component__field-actions__password--active:hover {
   background-color: rgba(var(--color-primary), 0.15);
+}
+
+.text-field-component__field-actions__password:focus-visible {
+  box-shadow: 0px 0px 1rem var(--px) rgba(var(--color-primary), 0.15);
+  outline-color: rgb(var(--color-primary));
+  outline-offset: calc(-1 * var(--px));
+  outline-width: calc(2 * var(--px));
 }
 
 .text-field-component__label {
