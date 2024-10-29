@@ -7,29 +7,33 @@ defineOptions({name: 'login-view'});
 
 <template>
   <div class="login-view">
-    <div class="login-view__form-shadow"></div>
+    <div class="login-view__card-snap"></div>
 
-    <form
-      class="login-view__form"
-      @submit.prevent
-    >
-      <div class="login-view__form__heading">Welcome to InnovaCure! 👋</div>
-      
-      <div class="login-view__form__subtext">Please sign-in to your account and start the adventure</div>
-
-      <text-field-component class="login-view__form__username">
-        <template #label>Username *</template>
-      </text-field-component>
-      
-      <text-field-component
-        class="login-view__form__password"
-        type="password"
+    <div class="login-view__card">
+      <form
+        class="login-view__card__form"
+        @submit.prevent
       >
-        <template #label>Password *</template>
-      </text-field-component>
+        <div class="login-view__card__form__heading">Welcome to InnovaCure! 👋</div>
+        
+        <div class="login-view__card__form__subtext">Please sign-in to your account and start the adventure</div>
+  
+        <text-field-component class="login-view__card__form__username">
+          <template #label>Username *</template>
+        </text-field-component>
+        
+        <text-field-component
+          class="login-view__card__form__password"
+          type="password"
+        >
+          <template #label>Password *</template>
+        </text-field-component>
+  
+        <button-component class="login-view__card__form__submit">Login</button-component>
+      </form>
 
-      <button-component class="login-view__form__submit">Login</button-component>
-    </form>
+      <div class="login-view__card__shade"></div>
+    </div>
 
     <div class="login-view__illustration">
       <img
@@ -50,40 +54,60 @@ defineOptions({name: 'login-view'});
 <style>
 .login-view {
   display: grid;
-  grid-template-columns: [form-start illustration-start logo-start] 1fr [form-end illustration-end logo-end];
-  grid-template-rows: [illustration-start logo-start] 100dvh [illustration-end form-start] 100dvh [logo-end form-end];
+  grid-template-columns: [card-start illustration-start logo-start] 1fr [card-end illustration-end logo-end];
+  grid-template-rows: [illustration-start logo-start] 100dvh [illustration-end card-start] 100dvh [logo-end card-end];
   height: 100dvh;
   overflow: hidden auto;
   scroll-snap-type: y mandatory;
 }
 
-.login-view__form-shadow {
-  grid-area: form;
-  scroll-snap-align: start;
+.login-view__card-snap {
+  background-color: rgb(var(--color-surface));
+  grid-area: card;
+  scroll-snap-align: end;
 }
 
-.login-view__form {
-  background-color: rgb(var(--color-surface));
+.login-view__card {
   bottom: 0px;
+  display: grid;
+  grid-area: card;
+  grid-template-columns: [form-start shade-start] 1fr [form-end shade-end];
+  grid-template-rows: [form-start shade-start] 1fr [form-end shade-end];
+  overflow: hidden auto;
+  position: sticky;
+}
+
+.login-view__card__form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   grid-area: form;
   justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 27.5rem;
   padding: 4.875rem 1rem 1.5rem 1rem;
-  position: sticky;
 }
 
-.login-view__form__heading {
+.login-view__card__shade {
+  background-image: linear-gradient(to bottom, rgb(var(--color-surface)) 70%, rgba(var(--color-surface), 0));
+  grid-area: shade;
+  height: 4.875rem;
+  pointer-events: none;
+  position: sticky;
+  top: 0px;
+}
+
+.login-view__card__form__heading {
   font-size: 1.5rem;
   font-weight: 500;
 }
 
-.login-view__form__subtext {
+.login-view__card__form__subtext {
   margin-bottom: 0.75rem;
 }
 
-.login-view__form__submit {
+.login-view__card__form__submit {
   margin-top: 0.75rem;
 }
 
@@ -91,8 +115,8 @@ defineOptions({name: 'login-view'});
   align-items: center;
   display: flex;
   grid-area: logo;
-  padding-top: 1.5rem;
   padding-left: 1rem;
+  padding-top: 1.5rem;
   place-self: start;
   position: sticky;
   top: 0px;
@@ -111,7 +135,7 @@ defineOptions({name: 'login-view'});
 .login-view__illustration {
   background-color: rgb(var(--color-background));
   grid-area: illustration;
-  padding: 1.5rem 1rem;
+  padding: 4.875rem 1rem 1.5rem 1rem;
   scroll-snap-align: start;
 }
 
@@ -120,5 +144,30 @@ defineOptions({name: 'login-view'});
   object-fit: contain;
   object-position: center;
   width: 100%;
+}
+
+@media screen and (min-width: 1200px) {
+  .login-view {
+    grid-template-columns: [illustration-start logo-start] 1fr [illustration-end logo-end card-start] auto [card-end];
+    grid-template-rows: [card-start illustration-start logo-start] 1fr [card-end illustration-end logo-end];
+    overflow: hidden;
+  }
+
+  .login-view__card__form {
+    padding: 4rem 2.5rem;
+  }
+
+  .login-view__card__shade {
+    display: none;
+  }
+
+  .login-view__logo {
+    padding-left: 2.5rem;
+    padding-top: 4rem;
+  }
+
+  .login-view__illustration {
+    padding: 7.375rem 2.5rem 4rem 2.5rem;
+  }
 }
 </style>
