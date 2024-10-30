@@ -1,8 +1,11 @@
 <script setup>
 import { onActivated, onDeactivated, onUnmounted, ref } from 'vue';
+import SpinnerComponent from '@/components/spinner.vue';
 
 defineOptions({name: 'button-component'});
 defineProps({
+  disabled: Boolean,
+  spinner: Boolean,
   type: {
     default: 'button',
     type: String,
@@ -88,12 +91,19 @@ addEventListener('mouseup', unsplash);
 <template>
   <button
     class="button-component"
+    :class="{'button-component--disabled': disabled}"
+    :disabled="disabled"
     ref="mainRef"
     :type="type"
     @mousedown="splash"
     @keydown.space.enter="splash"
   >
     <slot>Button</slot>
+
+    <spinner-component
+      class="button-component__spinner"
+      v-if="spinner"
+    ></spinner-component>
   </button>
 </template>
 
@@ -109,7 +119,15 @@ addEventListener('mouseup', unsplash);
   outline-offset: 0.35rem;
   overflow: hidden;
   padding: calc(0.5rem + var(--px)) calc(1.5rem + var(--px));
-  transition-property: background-color, outline, outline-offset;
+  transition-property: background-color, opacity, outline, outline-offset;
+}
+
+.button-component--disabled {
+  opacity: 0.65;
+}
+
+.button-component__spinner {
+  margin-left: 0.35rem;
 }
 
 .button-component__splash {

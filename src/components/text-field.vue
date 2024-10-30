@@ -6,6 +6,7 @@ import { createUid } from '@/utilities/uid';
 defineEmits(['update:modelValue']);
 defineOptions({name: 'text-field-component'});
 const props = defineProps({
+  disabled: Boolean,
   modelValue: String,
   type: {
     type: String,
@@ -51,10 +52,12 @@ loop();
 <template>
   <div
     class="text-field-component"
+    :class="{'text-field-component--disabled': disabled}"
     :style="{'--text-field-component--field-actions-offset': `${fieldActionsOffset}px`}"
   >
     <input
       class="text-field-component__field"
+      :disabled="disabled"
       :id="`text-field-component__field--${uid}`"
       :inputmode="inputmode"
       ref="fieldRef"
@@ -106,6 +109,11 @@ loop();
   display: inline-grid;
   grid-template-columns: [error-start field-start field-actions-start label-start] 1fr [label-end label-actions-start] auto [error-end field-end field-actions-end label-actions-end];
   grid-template-rows: [label-start label-actions-start] auto [label-end label-actions-end field-start field-actions-start] 1fr [field-end error-start field-actions-end] auto [error-end];
+  transition-property: opacity;
+}
+
+.text-field-component--disabled {
+  opacity: 0.65;
 }
 
 .text-field-component__field {

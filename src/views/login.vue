@@ -1,8 +1,38 @@
 <script setup>
+import { reactive, ref } from 'vue';
 import ButtonComponent from '@/components/button.vue';
+import LinkComponent from '@/components/link.vue';
 import TextFieldComponent from '@/components/text-field.vue';
+import useAuthStore from '@/stores/auth.js';
 
 defineOptions({name: 'login-view'});
+
+const authStore = useAuthStore();
+
+const abortController = ref(null);
+const form = reactive({
+  username: '',
+  password: '',
+});
+const formErrors = reactive({
+  username: null,
+  password: null,
+})
+
+async function login() {
+  if(!abortController.value) {
+    abortController.value = new AbortController();
+
+    try {
+      await authStore.login(form, abortController.value.signal);
+    } catch(error) {
+      console.log(error.message);
+    } finally {
+      abortController.value?.abort();
+      abortController.value = null;
+    }
+  }
+}
 </script>
 
 <template>
@@ -12,24 +42,43 @@ defineOptions({name: 'login-view'});
     <div class="login-view__card">
       <form
         class="login-view__card__form"
-        @submit.prevent
+        @submit.prevent="login"
       >
         <div class="login-view__card__form__heading">Welcome to InnovaCure! 👋</div>
         
         <div class="login-view__card__form__subtext">Please sign-in to your account and start the adventure</div>
   
-        <text-field-component class="login-view__card__form__username">
+        <text-field-component
+          class="login-view__card__form__username"
+          :disabled="!!abortController"
+          v-model="form.username"
+        >
           <template #label>Username *</template>
+          <template #error>{{ formErrors.username }}</template>
         </text-field-component>
         
         <text-field-component
           class="login-view__card__form__password"
+          :disabled="!!abortController"
           type="password"
+          v-model="form.password"
         >
           <template #label>Password *</template>
+          <template #label-actions>
+            <link-component
+              size="small"
+              :to="{name: 'password-reset'}"
+            >Forgot password?</link-component>
+          </template>
+          <template #error>{{ formErrors.password }}</template>
         </text-field-component>
   
-        <button-component class="login-view__card__form__submit">Login</button-component>
+        <button-component
+          class="login-view__card__form__submit"
+          :disabled="!!abortController"
+          :spinner="!!abortController"
+          type="submit"
+        >Login</button-component>
       </form>
 
       <div class="login-view__card__shade"></div>

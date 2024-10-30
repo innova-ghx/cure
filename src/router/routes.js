@@ -7,6 +7,11 @@ export default [
     component: LoginView,
   },
   {
+    path: '/password-reset',
+    name: 'password-reset',
+    component: () => import('@/views/password-reset.vue'),
+  },
+  {
     path: '/',
     redirect: {name: 'login'},
   },
