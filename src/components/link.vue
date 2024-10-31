@@ -17,15 +17,20 @@ const props = defineProps({
   },
 });
 
-const { navigate } = useLink(props);
+const { href, navigate } = (() => {
+  switch(true) {
+    case props.external: return {href: props.to, navigate() {}};
+    default: return useLink(props);
+  }
+})();
 </script>
 
 <template>
   <a
     class="link-component"
-    :class="[`link-component--${size}`]"
-    :href="external ? to : 'javascript:void(0);'"
-    @click="if(!external) navigate();"
+    :class="[`link-component--size-${size}`]"
+    :href="href"
+    @click="navigate"
   >
     <slot>Link</slot>
   </a>
@@ -34,9 +39,11 @@ const { navigate } = useLink(props);
 <style>
 .link-component {
   color: rgb(var(--color-primary));
+  font-weight: 500;
+  text-decoration: none;
 }
 
-.link-component--small {
+.link-component--size-small {
   font-size: 0.875rem;
 }
 </style>

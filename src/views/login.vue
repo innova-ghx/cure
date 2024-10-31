@@ -94,7 +94,6 @@ async function login() {
 
     <div class="login-view__logo">
       <img src="/logo.svg" alt="" class="login-view__logo__image">
-
       <div class="login-view__logo__text">InnovaCure</div>
     </div>
   </div>

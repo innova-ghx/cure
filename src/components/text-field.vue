@@ -113,6 +113,7 @@ loop();
 }
 
 .text-field-component--disabled {
+  cursor: not-allowed;
   opacity: 0.65;
 }
 
