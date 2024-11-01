@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import ButtonComponent from '@/components/button.vue';
 import LinkComponent from '@/components/link.vue';
 import TextFieldComponent from '@/components/text-field.vue';
@@ -7,6 +8,7 @@ import useAuthStore from '@/stores/auth.js';
 
 defineOptions({name: 'login-view'});
 
+const router = useRouter();
 const authStore = useAuthStore();
 
 const abortController = ref(null);
@@ -17,22 +19,23 @@ const form = reactive({
 const formErrors = reactive({
   username: null,
   password: null,
-})
+});
 
-async function login() {
-  if(!abortController.value) {
-    abortController.value = new AbortController();
-
-    try {
-      await authStore.login(form, abortController.value.signal);
-    } catch(error) {
-      console.log(error.message);
-    } finally {
-      abortController.value?.abort();
-      abortController.value = null;
-    }
+const handleLogin = async () => {
+  if (abortController.value) return;
+  
+  abortController.value = new AbortController();
+  
+  try {
+    const { redirect } = await authStore.login(form, abortController.value.signal);
+    router.push(redirect);
+  } catch (error) {
+    formErrors.username = error.message;
+  } finally {
+    abortController.value?.abort();
+    abortController.value = null;
   }
-}
+};
 </script>
 
 <template>
@@ -42,7 +45,7 @@ async function login() {
     <div class="login-view__card">
       <form
         class="login-view__card__form"
-        @submit.prevent="login"
+        @submit.prevent="handleLogin"
       >
         <div class="login-view__card__form__heading">Welcome to InnovaCure! 👋</div>
         

@@ -15,4 +15,9 @@ export default [
     path: '/',
     redirect: {name: 'login'},
   },
+  {
+    path: '/receptionist-dashboard',
+    name: 'receptionist-dashboard',
+    component: () => import('@/views/receptionist-dashboard.vue'),
+  }
 ];
